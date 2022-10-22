@@ -25,6 +25,39 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+on init
+    write /sys/class/backlight/panel0-backlight/brightness 200
+    setprop sys.usb.configfs 1
+    #ifdef VENDO_EDIT
+    #Shuangquan.du@PSW.AD.Recovery.0, 2019/08/22, Add for fastbood in recovery mode
+    mkdir /config/usb_gadget/g1/functions/ffs.fastboot
+    #endif
+
+on property:ro.boot.usbcontroller=*
+    setprop sys.usb.controller ${ro.boot.usbcontroller}
+    #ifdef OPLUS_FEATURE_OTAPACKAGE_UPDATER
+    #Shuangquan.du@PSW.AD.Recovery.0, 2020/08/17, Add for otg flash
+    #write /sys/class/udc/${ro.boot.usbcontroller}/device/../mode peripheral
+    #endif /*OPLUS_FEATURE_OTAPACKAGE_UPDATER*/
+
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+
+#ifdef OPLUS_FEATURE_OTAPACKAGE_UPDATER
+#Shuangquan.du@PSW.AD.Recovery.0, 2020/08/17, Add for otg flash
+on property:ro.boot.usbconfigfs=false
+   setprop sys.usb.configfs 0
+
+on property:ro.boot.recover_usb=*
+    write /sys/bus/platform/devices/a600000.ssusb/mode "peripheral"
+
+on property:sys.usb.ffs.ready=1
+    mkdir /config/usb_gadget/g1/configs/b.1 0777 shell shell
+    symlink /config/usb_gadget/g1/configs/b.1 /config/usb_gadget/g1/os_desc/b.1
+    mkdir /config/usb_gadget/g1/configs/b.1/strings/0x409 0770 shell shell
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb"
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+#endif /*OPLUS_FEATURE_OTAPACKAGE_UPDATER*/
+
