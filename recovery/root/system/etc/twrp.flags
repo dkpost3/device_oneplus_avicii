@@ -1,22 +1,45 @@
-# Android fstab file.
-# The filesystem that contains the filesystem checker binary (typically /system) cannot
-# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+#<src>                                                 <mnt_point>            <type>  <mnt_flags and options>                            <fs_mgr_flags>
+#ifdef OPLUS_FEATURE_STORAGE_MOUNT
+#Haoran.Zhang@PSW.TECH.Euclid.2221709, 2019/08/05, Modify for enable super partition
+odm                                                  /odm                   ext4    ro,barrier=1                                            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+odm                                                  /odm                   erofs   ro                                                      wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+#other mount
+#todo
+my_product         /mnt/vendor/my_product   ext4       ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_product         /mnt/vendor/my_product   erofs      ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_engineering     /mnt/vendor/my_engineering ext4     ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_engineering     /mnt/vendor/my_engineering erofs    ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_company         /mnt/vendor/my_company   ext4       ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_company         /mnt/vendor/my_company   erofs      ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_carrier        /mnt/vendor/my_carrier  ext4    ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_carrier        /mnt/vendor/my_carrier  erofs   ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_region         /mnt/vendor/my_region   ext4    ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_region         /mnt/vendor/my_region   erofs   ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_heytap          /mnt/vendor/my_heytap    ext4    ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_heytap          /mnt/vendor/my_heytap    erofs   ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_stock           /mnt/vendor/my_stock     ext4    ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_stock           /mnt/vendor/my_stock     erofs   ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_preload         /mnt/vendor/my_preload   ext4    ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_preload         /mnt/vendor/my_preload   erofs   ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_bigball         /mnt/vendor/my_bigball   ext4    ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_bigball         /mnt/vendor/my_bigball   erofs   ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_manifest        /mnt/vendor/my_manifest  ext4    ro,barrier=1  wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+my_manifest        /mnt/vendor/my_manifest  erofs   ro            wait,logical,first_stage_mount,avb_keys=/vendor/etc/oplus_avb.pubkey,nofail
+###
+/mnt/vendor/my_product    /my_product       none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_engineering /my_engineering  none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_company    /my_company       none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_carrier    /my_carrier     none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_region    /my_region       none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_heytap     /my_heytap        none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_stock    /my_stock           none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_preload    /my_preload       none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_bigball    /my_bigball       none     ro,bind       wait,nofail,first_stage_mount,nofail
+/mnt/vendor/my_manifest    /my_manifest       none     ro,bind       wait,nofail,first_stage_mount,nofail
+#endif
 
-# mount point		fstype		device			device2						flags
-
-/boot			emmc		/dev/block/bootdevice/by-name/boot					flags=slotselect
-/recovery		emmc		/dev/block/bootdevice/by-name/recovery					flags=slotselect;display="Recovery";backup=1;flashimg=1
-/storage		f2fs		/data/media/0								flags=display="Internal Storage";backup=1;usermrf;fsflags="bind";removable
-/firmware		vfat		/dev/block/bootdevice/by-name/modem					flags=slotselect;display="Firmware";mounttodecrypt;fsflags=ro
-/firmware_image		emmc		/dev/block/bootdevice/by-name/modem					flags=slotselect;display="Firmware";backup=1
-/modem			emmc		/dev/block/bootdevice/by-name/modem					flags=slotselect;backup=1;display="Modem"
-/bluetooth		emmc		/dev/block/bootdevice/by-name/bluetooth					flags=slotselect;backup=1;subpartitionof=/modem
-/dsp			emmc		/dev/block/bootdevice/by-name/dsp					flags=slotselect;backup=1;subpartitionof=/modem
-/efs1			emmc		/dev/block/bootdevice/by-name/modemst1					flags=backup=1;display=EFS
-/efs2			emmc		/dev/block/bootdevice/by-name/modemst2					flags=backup=1;subpartitionof=/efs1
-/efsc			emmc		/dev/block/bootdevice/by-name/fsc					flags=backup=1;subpartitionof=/efs1
-/efsg			emmc		/dev/block/bootdevice/by-name/fsg					flags=backup=1;subpartitionof=/efs1
-/op2			ext4		/dev/block/bootdevice/by-name/op2   
-
-# Removable storage
-/usb-otg		vfat		/dev/block/sdg1		/dev/block/sdg					flags=fsflags=utf8;display="USB-Storage";storage;wipeingui;removable
+#ifdef OPLUS_FEATURE_STORAGE
+#Runsheng.Pei@ANDROID.STORAGE.0, 2020/09/08, Add for new reserve partition
+/dev/block/by-name/oplusreserve2      /mnt/vendor/opporeserve             ext4   nosuid,nodev,noatime,barrier=1                           wait,check,first_stage_mount,nofail
+#endif
+/dev/block/bootdevice/by-name/custom                    /my_custom           ext4    ro,barrier=1,discard    wait
