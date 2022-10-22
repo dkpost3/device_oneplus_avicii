@@ -30,7 +30,7 @@ LOCAL_PATH := device/oneplus/avicii
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # API
-PRODUCT_SHIPPING_API_LEVEL := 29
+PRODUCT_SHIPPING_API_LEVEL := 30
 
 # A/B
 AB_OTA_POSTINSTALL_CONFIG += \
@@ -42,8 +42,10 @@ AB_OTA_POSTINSTALL_CONFIG += \
 PRODUCT_PACKAGES += \
     otapreopt_script
 
-# Boot control
+# Boot control HAL
 PRODUCT_PACKAGES += \
+    android.hardware.boot@1.1-impl \
+    android.hardware.boot@1.1-service \
     android.hardware.boot@1.1-impl-qti.recovery
 
 PRODUCT_PACKAGES_DEBUG += \

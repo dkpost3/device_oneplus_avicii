@@ -25,8 +25,15 @@ $(call inherit-product, device/oneplus/avicii/device.mk)
 $(call inherit-product, vendor/twrp/config/common.mk)
 
 # Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := avicii
+PRODUCT_DEVICE := avicii 
 PRODUCT_NAME := twrp_avicii
 PRODUCT_BRAND := OnePlus
 PRODUCT_MODEL := OnePlus Nord
 PRODUCT_MANUFACTURER := oneplus
+
+PRODUCT_GMS_CLIENTID_BASE := android-qualcomm
+
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    PRIVATE_BUILD_DESC="lito-user 12 RKQ1.211119.001 1659339521025 release-keys"
+
+BUILD_FINGERPRINT := qti/lito/lito:12/RKQ1.211119.001/1659339521025:user/release-keys
